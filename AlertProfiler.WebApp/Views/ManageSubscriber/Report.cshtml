@@ -1,0 +1,193 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.ReportResponse
+
+@{
+    ViewBag.Title = "Report";
+}
+
+
+@section MainContent{
+    
+    <div class="" style="margin-bottom:70px;">
+        <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+            <form action="~/ManageSubscriber/ReportAction" method="post">
+                <div class="col-md-3 col-sm-3 col-xs-3" style="padding-left:0px;">
+                    <span><strong>From: </strong></span><input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="" required />
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3" style="padding-left:0px;">
+                    <span><strong>To: </strong></span><input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="" required />
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3" style="padding-left:0px;">
+                    <span><strong>By: </strong></span>
+                    <select name="FilterBy" class="form-control" required>
+                        <option value="">-</option>
+                        <option value="0">Subscribe Pending</option>
+                        <option value="1">Subscribe Approve</option>
+                        <option value="2">Subscribe Disapprove</option>
+                        <option value="3">UnSubscribe Pending</option>
+                        <option value="4">UnSubscribe Approve</option>
+                        <option value="5">UnSubscribe Disapprove</option>
+                        <option value="6">ReSubscribe Pending</option>
+                        <option value="7">ReSubscribe Approve</option>
+                        <option value="8">ReSubscribe Disapprove</option>
+                        <option value="9">Update Pending</option>
+                        <option value="10">Update Approved</option>
+                        <option value="11">Update Disapprove</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3" style="padding-top: 21px;">
+                    <button type="submit" class="btn btn-primary btn-xs" value="load" name="ButtonAction">Load</button>
+                </div>
+            </form>
+                <br /><br /><br /><br />
+                                  <form action="~/ManageSubscriber/Export" method="post">
+
+                                      <button type="submit" class="btn btn-success btn-xs" value="download" name="ButtonAction">CSV Download</button>
+
+
+                                  </form>
+				<br /><br />
+            
+        </div>
+    </div>
+
+    <div class="table-responsive" style="height: 900px !important;">
+		<div>
+			
+		</div>
+        <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>SNo.</th>
+                    <th>
+                        AccountNumber
+                    </th>
+                    <th>
+                        PhoneNumber
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        CreatedBy
+                    </th>
+                    <th>
+                        DateCreated
+                    </th>
+                    <th>
+                        Approval Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+					int count = 1;
+                    foreach (var item in Model.ReportList)
+                    {
+						<tr>
+							<td>count</td>
+							<td>
+								@{
+                                    string[] accountNumberList = item.AccountNumber.Split(';');
+                                    foreach (var accountNumber in accountNumberList)
+                                    {
+                                        if (!string.IsNullOrEmpty(accountNumber))
+                                        {
+                                            <span class="label label-primary">@accountNumber</span>
+                                        }
+                                    }
+                                }
+							</td>
+							<td>@item.PhoneNumber</td>
+							<td>
+								@{
+                                    const int MaxLength = 19;
+                                    if (item.Description.ToString().Length > MaxLength)
+                                    {
+                                        @item.Description.ToString().Substring(0, MaxLength) <span style="cursor:pointer;" title="Click to view all Description!">[More...]</span>
+                                    }
+
+                                    if (item.Description.ToString().Length <= MaxLength)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    }
+                                }
+							</td>
+							<td>@item.CreatedBy</td>
+							<td>@item.DateCreated</td>
+							<td>							
+								@if (item.IsApproved == 0)
+                                {
+                                    <span class="label label-warning">Pending</span>
+                                }
+                                @if (item.IsApproved == 1)
+                                {
+                                    <span class="label label-success">Approved</span>
+                                }
+                                @if (item.IsApproved == 2)
+                                {
+                                    <span class="label label-danger">DisApproved</span>
+                                }
+                                @if (item.IsApproved == 3)
+                                {
+                                    <span class="label label-warning">UnSubscribe Pending</span>
+                                }
+                                @if (item.IsApproved == 4)
+                                {
+                                    <span class="label label-success">UnSubscribe Approved</span>
+                                }
+                                @if (item.IsApproved == 5)
+                                {
+                                    <span class="label label-danger">UnSubscribe DisApproved</span>
+                                }
+
+
+                                @if (item.IsApproved == 6)
+                                {
+                                    <span class="label label-warning">ReSubscribe Pending</span>
+                                }
+
+                                @if (item.IsApproved == 7)
+                                {
+                                    <span class="label label-success">ReSubscribe Approved</span>
+                                }
+
+                                @if (item.IsApproved == 8)
+                                {
+                                    <span class="label label-danger">ReSubscribe DisApproved</span>
+                                }
+
+                                @if (item.IsApproved == 9)
+                                {
+                                    <span class="label label-warning">Update Pending</span>
+                                }
+
+                                @if (item.IsApproved == 10)
+                                {
+                                    <span class="label label-success">Update Approved</span>
+                                }
+
+                                @if (item.IsApproved == 11)
+                                {
+                                    <span class="label label-danger">Update DisApproved</span>
+                                }							
+							
+							</td>
+						</tr>
+						
+						count += 1;
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ItemListTbl').dataTable();
+        });
+    </script>
+}

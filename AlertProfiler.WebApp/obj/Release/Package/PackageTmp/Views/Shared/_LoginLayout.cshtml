@@ -1,0 +1,58 @@
+﻿@using System.Web.Mvc.Html;
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="description" content="AlertProfiler" />
+    <meta name="keywords" content="AlertProfiler" />
+    <meta name='expires' content='never' />
+    <meta name='language' content='english, EN' />
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name='charset' content='utf-8' />
+    <meta name='distribution' content='Global' />
+    <meta name='copyright' content='Copyright ©2016' />
+    @*<meta name="author" content="IT Solutions" />*@
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css' />
+    <title>FirstBank PLC - @ViewBag.Title</title>
+    <link href="~/Images/fbnlogo.jpg" rel="icon" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/jqueryui")
+    <link href="@Url.Content("~/Content/style.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href=""><img src="~/Images/fbnlogo.jpg" alt="" /></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right"></ul>
+            </div>
+        </div>
+    </nav>
+    <div id="page-wrapper">
+        <div class="row">
+            <!-- Page Header -->
+            <div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
+                <div>
+                    @*@{ Html.RenderPartial("_Alerts"); }*@
+                    @RenderSection("MainContent", required: true)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footerwrap">
+        <span class="copyright">&copy;@DateTime.Now.Year  <a href="https://www.Firstbanknigeria.com" _target="blank" class="go-top">First Bank of Nigeria Ltd.</a> All Rights Reserved </span>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+﻿@using System.Web.Mvc.Html;
+@{
+
+    var userData = AlertProfiler.WebApp.Controllers.BaseController.RetrieveUserInfo();
+
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="description" content="AlertProfiler" />
+    <meta name="keywords" content="AlertProfiler" />
+    <meta name='expires' content='never' />
+    <meta name='language' content='english, EN' />
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name='charset' content='utf-8' />
+    <meta name='distribution' content='Global' />
+    <meta name='copyright' content='Copyright ©@DateTime.Now.Year' />
+    <meta name="author" content="Solutions" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css' />
+    <title>FirstBank PLC - @ViewBag.Title</title>
+    <link href="~/Images/fbnlogo.jpg" rel="icon" sizes="57x57" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/Content/jqueryui")
+    @RenderSection("css", required: false)
+    <link href="@Url.Content("~/Content/basic.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/custom.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div id="wrapper">
+        <!-- navbar top -->
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" id="navbar" style="margin-bottom: 0">
+            <!-- navbar-header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="~/Home/Home"><img src="~/Images/fbnlogo.jpg" alt="" /></a>
+            </div>
+            <!-- end navbar-header -->
+            <!-- navbar-top-links -->
+            <div class="header-right">
+                <div class="pull-left">
+                    <p style="float: left;"></p>
+                    <div style="float: left;">
+                        <div class="col-sm-8" style="padding: 0; font-size:11px;">
+                            <span>@AlertProfiler.WebApp.Resources.Layout.WELCOME_MESSAGE :</span>
+                            <h5 style="font-size:11px;">
+                                @if (Session["username"] != null)
+                                {
+                                    <label>@Session["displayname"].ToString()</label>
+                                    <br />
+                                    <label>@Session["username"].ToString()</label>
+
+                                }
+                                else
+                                {
+                                    //  AlertProfiler.BusinessCore.Services.LogService.LogInfo("01", "layoutpage", "userdata", "routing to homelogin");
+                                    Context.Response.Redirect("~/Home/Login");
+                                }
+                            </h5>
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="~/Home/logout" class="btn btn-danger pull-right btn-xs" title="Log Out">
+                                @AlertProfiler.WebApp.Resources.Layout.LOG_OUT
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end navbar-top-links -->
+        </nav>
+        <!-- navbar side -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <!-- sidebar-collapse -->
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu collapse"></ul>
+                <div class="list-group">
+                    <a class="list-group-item disabled">
+                        <strong>@AlertProfiler.WebApp.Resources.Layout.ALERT_DASHBOARD</strong>
+                    </a>
+                    @if (!string.IsNullOrEmpty(userData.RoleAction))
+                    {
+
+                        if (userData.CountryId == "05")
+                        {
+                            if (userData.RoleAction == "maker")
+                            {
+
+                                <a href="~/SubscribeAlert/Index" class="list-group-item" title="Subscribe SMS/Email Alerts">@AlertProfiler.WebApp.Resources.Layout.SUSCRIBE_ALERT_MENU</a>
+                                <a href="~/UpdateAlert/Index" class="list-group-item" title="Update SMS/Email Alerts">@AlertProfiler.WebApp.Resources.Layout.UPDATE_ALERT_MENU</a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.ALERT_REPORT_MENU</a>
+
+                                <a class="list-group-item disabled">
+                                    <strong>ORANGE DASHBOARD</strong>
+                                </a>
+
+                                <a href="~/SubscribeOrange/Index" class="list-group-item" title="Subscribe Account">Subscribe</a>
+                                <a href="~/UnSubscribeOrange/Index" class="list-group-item" title="Unsubscribe Account">Unsubscribe</a>
+                                <a href="~/ManageOrangeSubscriber/Report" class="list-group-item" title="Report">Orange Report</a>
+
+                            }
+                            if (userData.RoleAction == "checker")
+                            {
+                                <a href="~/ManageAlert/Index" class="list-group-item" title="Manage Approval">@AlertProfiler.WebApp.Resources.Layout.MANAGE_SUSCRIBER_MENU</a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.ALERT_REPORT_MENU</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.AUDIT_MENU</a>
+
+                                <a class="list-group-item disabled">
+                                    <strong>ORANGE DASHBOARD</strong>
+                                </a>
+                                <a href="~/ManageOrangeSubscriber/Index" class="list-group-item" title="Manage Approval">Manage Subscriber(Orange)</a>
+                                <a href="~/ManageOrangeSubscriber/Report" class="list-group-item" title="Report">Orange Report</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">Audit</a>
+
+
+                            }
+                            if (userData.RoleAction == "support")
+                            {
+
+                                <a class="list-group-item disabled">
+                                    <strong>@AlertProfiler.WebApp.Resources.Layout.ADMIN_DASHBOARD</strong>
+                                </a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">Alert Report</a>
+                                <a href="~/ManageAlert/FinacleAlertReport" class="list-group-item" title="Report">Alert Finacle Report</a>
+                                <a href="~/ManageOrangeSubscriber/Report" class="list-group-item" title="Report">Orange Report</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">Audit</a>
+
+                            }
+                        }
+                        else if (userData.CountryId == "02")
+                        {
+                            if (userData.RoleAction == "maker")
+                            {
+
+                                <a href="~/SubscribeAlert/Index" class="list-group-item" title="Subscribe SMS/Email Alerts">Suscribe Alert</a>
+                                <a href="~/UpdateAlert/Index" class="list-group-item" title="Update SMS/Email Alerts">Update Alert Profile</a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">Alert Report</a>
+
+                                <a class="list-group-item disabled">
+                                    <strong>MOBILE MONEY DASHBOARD</strong>
+                                </a>
+
+                                <a href="~/Subscribe/Index" class="list-group-item" title="Subscribe Account">Subscribe</a>
+                                <a href="~/UnSubscribe/Index" class="list-group-item" title="Unsubscribe Account">Unsubscribe</a>
+                                <a href="~/ReSubscribe/Index" class="list-group-item" title="Re-Subscribe Account">ReSubscribe</a>
+                                <a href="~/UpdateSubscriber/Index" class="list-group-item" title="Update Subscriber Account">Update Subscriber</a>
+                                <a href="~/CheckSubscriber/Index" class="list-group-item" title="Check Subscriber Account">Check Subscriber</a>
+                                <a href="~/Transaction/AccountToWallet" class="list-group-item" title="A2W">Account to Wallet Transactions</a>
+                                <a href="~/Transaction/WalletToAccount" class="list-group-item" title="W2A">Wallet to Account Transactions</a>
+
+                            }
+                            if (userData.RoleAction == "checker")
+                            {
+                                <a href="~/ManageAlert/Index" class="list-group-item" title="Manage Approval">Manage Subscriber(Alert)</a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">Alert Report</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">Audit</a>
+
+                                <a class="list-group-item disabled">
+                                    <strong>MOBILE MONEY DASHBOARD</strong>
+                                </a>
+                                <a href="~/ManageSubscriber/Index" class="list-group-item" title="Manage Approval">Manage Subscriber(MTN)</a>
+                                <a href="~/ManageSubscriber/Report" class="list-group-item" title="Report">MTN Report</a>
+                                <a href="~/Transaction/AccountToWallet" class="list-group-item" title="A2W">Account to Wallet Transactions</a>
+                                <a href="~/Transaction/WalletToAccount" class="list-group-item" title="W2A">Wallet to Account Transactions</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">Audit</a>
+
+
+                            }
+                            if (userData.RoleAction == "support")
+                            {
+
+                                <a class="list-group-item disabled">
+                                    <strong>ADMIN DASHBOARD</strong>
+                                </a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">Alert Report</a>
+                                <a href="~/ManageAlert/FinacleAlertReport" class="list-group-item" title="Report">Alert Finacle Report</a>
+                                <a href="~/ManageSubscriber/Report" class="list-group-item" title="Report">Mobile Money Report</a>
+                                <a href="~/Transaction/AccountToWallet" class="list-group-item" title="A2W">Account to Wallet Transactions</a>
+                                <a href="~/Transaction/WalletToAccount" class="list-group-item" title="W2A">Wallet to Account Transactions</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">Audit</a>
+
+                            }
+                        }
+                        else
+                        {
+                            if (userData.RoleAction == "maker")
+                            {
+
+                                <a href="~/SubscribeAlert/Index" class="list-group-item" title="Subscribe SMS/Email Alerts">@AlertProfiler.WebApp.Resources.Layout.SUSCRIBE_ALERT_MENU</a>
+                                <a href="~/UpdateAlert/Index" class="list-group-item" title="Update SMS/Email Alerts">@AlertProfiler.WebApp.Resources.Layout.UPDATE_ALERT_MENU</a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.ALERT_REPORT_MENU</a>
+
+                            }
+                            if (userData.RoleAction == "checker")
+                            {
+                                <a href="~/ManageAlert/Index" class="list-group-item" title="Manage Approval">@AlertProfiler.WebApp.Resources.Layout.MANAGE_SUSCRIBER_MENU</a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.ALERT_REPORT_MENU</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.AUDIT_MENU</a>
+
+                            }
+                            if (userData.RoleAction == "support")
+                            {
+
+                                <a class="list-group-item disabled">
+                                    <strong>@AlertProfiler.WebApp.Resources.Layout.ADMIN_DASHBOARD</strong>
+                                </a>
+                                <a href="~/ManageAlert/Report" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.ALERT_REPORT_MENU</a>
+                                <a href="~/ManageAlert/FinacleAlertReport" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.ALERT_FINACLE_REPORT</a>
+                                <a href="~/Home/AuditReport" class="list-group-item" title="Report">@AlertProfiler.WebApp.Resources.Layout.AUDIT_MENU</a>
+
+                            }
+                        }
+
+                    }
+                    <a href="~/Home/logout" class="list-group-item" title="Logout">Logout</a>
+                </div>
+            </div>
+            <!-- end sidebar-collapse -->
+        </nav>
+        <!--  page-wrapper -->
+        <div id="page-wrapper">
+            <div id="page-inner">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- end page-wrapper -->
+        <div id="footer-sec">
+            <span class="copyright">&copy;@DateTime.Now.Year  <a href="https://www.Firstbanknigeria.com" _target="blank" class="go-top">First Bank of Nigeria Ltd.</a> All Rights Reserved </span>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        @{var baseUrl = Request.Url.GetLeftPart(UriPartial.Authority) + Request.ApplicationPath; }
+        var baseUrl = "@baseUrl/";
+        var timeOutInMilliSeconds = 600000;
+
+        console.log("CONSOLE LOG: " + baseUrl);
+
+        $(document).ready(function () {
+            SessionTimeOutCounter();
+        });
+
+        function SessionTimeOutCounter() {
+            setInterval("SessionTimeOutOperation()", timeOutInMilliSeconds);
+        }
+
+        function SessionTimeOutOperation() {
+            window.location.href = baseUrl + "Home/LogOut";
+        }
+    </script>
+</body>
+</html>

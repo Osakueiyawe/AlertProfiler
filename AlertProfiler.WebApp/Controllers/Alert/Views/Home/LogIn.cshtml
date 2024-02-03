@@ -1,0 +1,51 @@
+﻿@model AlertProfiler.CoreObject.DataTransferObjects.LoginResponse
+
+    @{
+        ViewBag.Title = "Login";
+        Layout = "~/Views/Shared/_Layout2.cshtml";
+    }
+
+    @section MainContent {
+
+        <form action="~/Home/LoginAction" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @if (!string.IsNullOrEmpty(Model.ResponseMessage))
+                {
+                    <div class="alert alert-danger alert-dismissable">
+                        @Model.ResponseMessage
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                    </div>
+                }
+
+                <div class="col-md-8 col-md-offset-2 col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
+                    <h4 class="page-head-line">Alert Profiler</h4>
+                    <div class="panel-body" id="LoginDiv">
+                        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control input-sm", placeholder = "User_Id", maxlength = 32, autocomplete = "off" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control input-sm", placeholder = "Password", maxlength = 32, autocomplete = "off" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.TokenCode, "", new { @class = "text-danger" })
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                            @Html.PasswordFor(model => model.TokenCode, new { @class = "form-control input-sm", placeholder = "Token", maxlength = 32, autocomplete = "off" })
+                        </div>
+                        <div>
+                            <input type="submit" value="Login" class="btn btn-primary btn-xs" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    }
+

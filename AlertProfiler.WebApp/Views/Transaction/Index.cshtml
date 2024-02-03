@@ -1,0 +1,105 @@
+﻿@model  IEnumerable<AlertProfiler.CoreObject.Model.WalletToAccountTransactionLog>
+@{
+    ViewBag.Title = "Pending Transactions";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+
+
+
+<div class="table-responsive" style="height: 900px !important;">
+    <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+        <thead>
+            <tr>
+                <th>SNo.</th>
+                <th>
+                    AccountNumber
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                No of Attempts 
+                </th>
+                <th>
+                    Reference
+                </th>
+                <th>
+                   Request Date
+                </th>
+                <th>Corebanking Code</th>
+                <th>CoreBanking Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int sno = 1; }
+
+
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+            <tr>
+                <td>@sno</td>
+                <td>
+                    @item.DestinationAccountNumber
+                </td>
+                <td>
+                    @item.WalletId
+                </td>
+                <td>
+                    @item.Amount
+                </td>
+                <td>
+
+                    @if (item.IsPosted == false)
+                    {
+                        <span class="label label-warning">Pending</span>
+                    }
+                    @if (item.IsPosted == true)
+                    {
+                        <span class="label label-success">Approved</span>
+                    }
+                </td>
+                <td>
+                    @item.RetrialCount
+                </td>
+                <td>
+                    @item.ClientReferenceId
+                </td>
+                <td>
+                    @item.RequestDate
+                </td>
+                <td>
+                    @item.CoreBankingResponseCode
+                </td>
+                <td>
+                    @item.CoreBankingResponseMessage
+                </td>
+
+            </tr>
+
+                    sno++;
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ItemListTbl').dataTable();
+        });
+    </script>
+    }
+
+
+

@@ -1,0 +1,296 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.ManageAlertResponse
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    @if (Model.ResponseCode != null)
+    {
+        if (Model.ResponseCode != "00")
+        {
+            <div class="alert alert-danger alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+            </div>
+        }
+
+        if (Model.ResponseCode == "00")
+        {
+            <div class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+            </div>
+        }
+    }
+</div>
+
+
+<h4>@ViewBag.Title</h4>
+<div class="" style="margin-bottom:70px;">
+    <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+        <form action="~/ManageAlert/SubscriberBetweenDateRangeAction" method="post">
+            <div class="col-md-4 col-sm-4 col-xs-4" style="padding-left:0px;">
+                <span><strong>From: </strong></span><input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="@string.Format("{0:yyyy-MM-dd}", Model.DateFrom)" required />
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4" style="padding-left:0px;">
+                <span><strong>To: </strong></span><input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="@string.Format("{0:yyyy-MM-dd}", Model.DateTo)" required />
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4" style="padding-top: 21px;">
+                <button type="submit" class="btn btn-primary btn-xs" value="load" name="ButtonAction">Load</button>
+            </div>
+            <br />
+        </form>
+    </div>
+
+    <div class="col-md-4 col-sm-4 col-xs-4">
+        <div class="float-right">
+            @if (Model.ResponseCode == "00")
+            {
+                <form action="~/ManageSubscriber/ApproveAllSubscriberAction" method="post">
+                    <div style="display:none;">
+                        <input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="@string.Format("{0:yyyy-MM-dd}", Model.DateFrom)" />
+                        <input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="@string.Format("{0:yyyy-MM-dd}", Model.DateTo)" />
+                    </div>
+                    @*<button type="submit" class="btn btn-success btn-xs" value="approve" name="ButtonAction">Approve All</button>*@
+                </form>
+                <form action="~/ManageSubscriber/DisApproveAllSubscriberAction" method="post">
+                    <div style="display:none;">
+                        <input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="@string.Format("{0:yyyy-MM-dd}", Model.DateFrom)" />
+                        <input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="@string.Format("{0:yyyy-MM-dd}", Model.DateTo)" />
+                    </div>
+                    @*<button type="submit" class="btn btn-danger btn-xs" value="disapprove" name="ButtonAction">Disapprove All</button>*@
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive" style="height: 900px !important;">
+    <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+        <thead>
+            <tr>
+                <th>SNo.</th>
+                <th>
+                    AccountNumber
+                </th>
+                <th>
+                    PhoneNumber
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    SMS Alert?
+                </th>
+                <th>
+                    Email Alert?
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    CreatedBy
+                </th>
+                <th>
+                    DateCreated
+                </th>
+                <th>
+                    Approval Status
+                </th>
+                <th>Action</th>
+                <th>Rejection Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int sno = 1; }
+
+
+            @if (Model.ResponseCode == "00")
+            {
+                foreach (var item in Model.Subscribers)
+                {
+                    <tr>
+                        <td>@sno</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MobileNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsSMSAlert)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsEmailAlert)
+                        </td>
+                        <td>
+                            @{
+                                const int MaxLength = 19;
+                                if (item.Description.ToString().Length > MaxLength)
+                                {
+                                    @item.Description.ToString().Substring(0, MaxLength) <span style="cursor:pointer;" title="Click to view all Description!">[More...]</span>
+                                }
+
+                                if (item.Description.ToString().Length <= MaxLength)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+
+                            @if (item.IsApproved == 0)
+                            {
+                                <span class="label label-warning">Pending</span>
+                            }
+                            @if (item.IsApproved == 1)
+                            {
+                                <span class="label label-success">Approved</span>
+                            }
+                            @if (item.IsApproved == 2)
+                            {
+                                <span class="label label-danger">DisApproved</span>
+                            }
+                            @if (item.IsApproved == 3)
+                            {
+                                <span class="label label-warning">UnSubscribe Pending</span>
+                            }
+                            @if (item.IsApproved == 4)
+                            {
+                                <span class="label label-success">UnSubscribe Approved</span>
+                            }
+                            @if (item.IsApproved == 5)
+                            {
+                                <span class="label label-danger">UnSubscribe DisApproved</span>
+                            }
+
+
+                            @if (item.IsApproved == 6)
+                            {
+                                <span class="label label-warning">ReSubscribe Pending</span>
+                            }
+
+                            @if (item.IsApproved == 7)
+                            {
+                                <span class="label label-success">ReSubscribe Approved</span>
+                            }
+
+                            @if (item.IsApproved == 8)
+                            {
+                                <span class="label label-danger">ReSubscribe DisApproved</span>
+                            }
+
+                            @if (item.IsApproved == 9)
+                            {
+                                <span class="label label-warning">Update Pending</span>
+                            }
+
+                            @if (item.IsApproved == 10)
+                            {
+                                <span class="label label-success">Update Approved</span>
+                            }
+
+                            @if (item.IsApproved == 11)
+                            {
+                                <span class="label label-danger">Update DisApproved</span>
+                            }
+
+
+                        </td>
+                        <td>
+                            @if (item.IsApproved == 1 || item.IsApproved == 2 || item.IsApproved == 4 || item.IsApproved == 5 || item.IsApproved == 7 || item.IsApproved == 8 || item.IsApproved == 10 || item.IsApproved == 11)
+                            {
+                            }
+                            else
+                            {
+                                <a href="~/ManageAlert/Approve?id=@item.RequestId" class="btn btn-xs btn-success">Approve</a>
+                                <br />
+                                <button type="submit" class="btn btn-xs btn-danger" id="btnLink" data-id='@item.RequestId' onclick="moveNumbers()">Disapprove</button>
+                                <br />
+                                <input class="input-sm single-line" id="mapid" name="mapid" type="text" value="@item.RequestId" style="width: 50px;" hidden>
+
+                            }
+
+                        </td>
+                        <td>
+                         @item.RejectionReason
+
+                        </td>
+                    </tr>
+
+                    sno++;
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+<div class="modal fade" id="ModalPopUp" role="dialog">
+    <div class="modal-dialog err-pop" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="DivClose" type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <form action="~/ManageAlert/DisApprove" method="post">
+                                       
+                    <div class="row">
+
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                            <h1 class="page-head-line">Please enter rejection reason</h1>
+                            <div class="panel-body" id="LoginDiv">
+                                <input class="input-sm single-line" id="RequestId" name="RequestId" type="text" style="width: 50px;" hidden>
+                                <textarea class="input-xlarge" id="RejectionReason" name="RejectionReason"  rows="8" cols="0" placeholder="Rejection Reason" style="width: 400px; height:150px"></textarea>                             
+                               
+                                <span class="field-validation-valid text-danger" data-valmsg-for="RejectionReason" data-valmsg-replace="true"></span>
+                                <div>
+                                    <a href="#" class="btn" data-dismiss="modal">Close</a>
+                                    <input type="submit" value="Submit" class="btn btn-primary btn-xs" title="Submit!">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function moveNumbers() {
+        var txt = document.getElementById("mapid").value;
+        document.getElementById("RequestId").value = txt;
+    }
+</script>
+
+
+<script src="https://code.jquery.com/jquery-1.10.0.min.js"
+        integrity="sha256-2+LznWeWgL7AJ1ciaIG5rFP7GKemzzl+K75tRyTByOE="
+        crossorigin="anonymous"></script>
+<script>
+    $("#btnLink").click(function () {
+        $('#ModalPopUp').modal('show');
+    })
+
+    
+</script>
+

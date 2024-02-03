@@ -1,0 +1,146 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.ReportResponse
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+<h2>SMS/Email Alert Report(Historical)</h2>
+
+<div class="row">
+    @if (Model.ResponseCode != null)
+    {
+        if (Model.ResponseCode != "00")
+        {
+            <div class="alert alert-danger alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+            </div>
+        }
+
+        if (Model.ResponseCode == "00")
+        {
+            <div class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+            </div>
+        }
+    }
+</div>
+
+
+
+<div class="" style="margin-bottom:70px;">
+    <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+        <form action="~/ManageAlert/ExportFinacleReport" method="post">
+
+            <button type="submit" class="btn btn-success btn-xs" value="download" name="ButtonAction">CSV Download</button>
+
+
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive" style="height: 900px !important;">
+    <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+        <thead>
+            <tr>
+                <th>SNo.</th>
+                <th>
+                    AccountNumber
+                </th>
+                <th>
+                    PhoneNumber
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    SMS Alert?
+                </th>
+                <th>
+                    Email Alert?
+                </th>
+                
+                <th>
+                    CreatedBy
+                </th>
+                <th>
+                    DateCreated
+                </th>
+                <th>
+                    Approval Status
+                </th>
+
+              
+            </tr>
+        </thead>
+        <tbody>
+            @{int sno = 1; }
+
+
+            @if (Model.ResponseCode == "00")
+            {
+                foreach (var item in Model.FinacleAlertList)
+                {
+                    <tr>
+                        <td>@sno</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ACCOUNTNO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MOBILENO)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EMAIL)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SMS_ALERT_FLG)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EMAIL_ALERT_FLG)
+                        </td>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CREATED_BY)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CREATED_DATE)
+                        </td>
+                        <td>
+
+                            @if (item.STATUS_FLG == "N")
+                            {
+                                <span class="label label-warning">Pending</span>
+                            }
+                            @if (item.STATUS_FLG == "Y")
+                            {
+                                <span class="label label-success">Approved</span>
+                            }
+                            @if (item.STATUS_FLG == "2")
+                            {
+                                <span class="label label-danger">DisApproved</span>
+                            }
+                           
+
+
+                        </td>
+
+                       
+                    </tr>
+
+                    sno++;
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ItemListTbl').dataTable();
+        });
+    </script>
+}

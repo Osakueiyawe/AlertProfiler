@@ -1,0 +1,206 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.ReportResponse
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+<h2>SMS/Email Alert Report</h2>
+
+<div class="row">
+    @if (Model.ResponseCode != null)
+    {
+        if (Model.ResponseCode != "00")
+        {
+            <div class="alert alert-danger alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+            </div>
+        }
+
+        if (Model.ResponseCode == "00")
+        {
+            <div class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+            </div>
+        }
+    }
+</div>
+
+
+
+<div class="" style="margin-bottom:70px;">
+    <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+        <form action="~/ManageAlert/Export" method="post">
+
+            <button type="submit" class="btn btn-success btn-xs" value="download" name="ButtonAction">CSV @AlertProfiler.WebApp.Resources.AlertApproval.DOWNLOAD</button>
+
+
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive" style="height: 900px !important;">
+    <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+        <thead>
+            <tr>
+                <th>SNo.</th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.ACCOUNT_NUMBER
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.MOBILE_NUMBER
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.EMAIL
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.SMS_ALERT?
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.EMAIL_ALERT?
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.DESCRIPTION
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.CREATED_BY
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.DATE_CREATED
+                </th>
+                <th>
+                    @AlertProfiler.WebApp.Resources.AlertApproval.APPROVAL_STATUS
+                </th>
+
+                <th>@AlertProfiler.WebApp.Resources.AlertApproval.REJECTION_REASON</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int sno = 1; }
+
+
+            @if (Model.ResponseCode == "00")
+            {
+                foreach (var item in Model.AlertReportList)
+                {
+                    <tr>
+                        <td>@sno</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AccountNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MobileNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsSMSAlert)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsEmailAlert)
+                        </td>
+                        <td>
+                            @{
+                                const int MaxLength = 19;
+                                if (item.Description.ToString().Length > MaxLength)
+                                {
+                                    @item.Description.ToString().Substring(0, MaxLength) <span style="cursor:pointer;" title="Click to view all Description!">[More...]</span>
+                                }
+
+                                if (item.Description.ToString().Length <= MaxLength)
+                                {
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                        <td>
+
+                            @if (item.IsApproved == 0)
+                            {
+                            <span class="label label-warning">@AlertProfiler.WebApp.Resources.AlertApproval.PENDING</span>
+                            }
+                            @if (item.IsApproved == 1)
+                            {
+                        <span class="label label-success">@AlertProfiler.WebApp.Resources.AlertApproval.APPROVED</span>
+                            }
+                            @if (item.IsApproved == 2)
+                            {
+                        <span class="label label-danger">@AlertProfiler.WebApp.Resources.AlertApproval.DISAPPROVED</span>
+                            }
+                            @if (item.IsApproved == 3)
+                            {
+                                <span class="label label-warning">UnSubscribe Pending</span>
+                            }
+                            @if (item.IsApproved == 4)
+                            {
+                                <span class="label label-success">UnSubscribe Approved</span>
+                            }
+                            @if (item.IsApproved == 5)
+                            {
+                                <span class="label label-danger">UnSubscribe DisApproved</span>
+                            }
+
+
+                            @if (item.IsApproved == 6)
+                            {
+                                <span class="label label-warning">ReSubscribe Pending</span>
+                            }
+
+                            @if (item.IsApproved == 7)
+                            {
+                                <span class="label label-success">ReSubscribe Approved</span>
+                            }
+
+                            @if (item.IsApproved == 8)
+                            {
+                                <span class="label label-danger">ReSubscribe DisApproved</span>
+                            }
+
+                            @if (item.IsApproved == 9)
+                            {
+                        <span class="label label-warning">@AlertProfiler.WebApp.Resources.AlertApproval.UPDATE_PENDING</span>
+                            }
+
+                            @if (item.IsApproved == 10)
+                            {
+                        <span class="label label-success">@AlertProfiler.WebApp.Resources.AlertApproval.UPDATE_APPROVED</span>
+                            }
+
+                            @if (item.IsApproved == 11)
+                            {
+                        <span class="label label-danger">@AlertProfiler.WebApp.Resources.AlertApproval.UPDATE_APPROVED</span>
+                            }
+
+
+                        </td>
+
+                        <td>
+                            @item.RejectionReason
+
+                        </td>
+                    </tr>
+
+                    sno++;
+                }
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ItemListTbl').dataTable();
+        });
+    </script>
+}

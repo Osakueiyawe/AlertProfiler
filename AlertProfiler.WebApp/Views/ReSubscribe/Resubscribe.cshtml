@@ -1,0 +1,61 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.AccountListByPhoneNumberResponse
+
+@{
+    ViewBag.Title = "ReSubscribe";
+}
+
+@section MainContent{
+    <div id="page-wrapper" style="margin-left: 0px; margin-right: 0px;">
+        <div class="row">
+            @{
+                if (Model.ResponseCode == "00")
+                {
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div>
+                            <hr>
+                            <form action="~/ReSubscribe/ReSubscribeAction" method="post">
+                                <div class="row">
+                                    <h1 class="page-head-line">Account Details</h1>
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <img src="~/Images/enrolment_icon.jpg" />
+                                    </div>
+
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
+                                        <div class="panel-body" id="LoginDiv">
+                                            <h5>ReSubscribe customer from the system</h5>
+                                            <br /><br />
+                                            @{
+                                                <label>Account Number(s): </label>
+                                                <span id="accountnumbermessage"></span>
+                                                foreach (var item in Model.ListAccountByAccountNumberResponse)
+                                                {
+                                                    <div class="form-group input-group">
+                                                        <span style="font-size: 11px;"><strong>@item.AccountName - @item.AccountNumber - [ @item.AccountType ]</strong></span>
+                                                    </div>
+                                                }
+
+                                                <hr />
+                                                <label>Phone Number:</label>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                    <input class="form-control input-sm text-box single-line" type="text" name="PhoneNumber" readonly value="@Html.DisplayFor(model => model.PhoneNumber)" required>
+                                                </div>
+
+
+                                                <a href="~/ReSubscribe/" class="alert-link btn btn-primary btn-xs float-left" title="Click to go back!"><< Back</a>
+                                                <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit">Submit</button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                                                }
+            }
+        </div>
+    </div>
+
+}
+

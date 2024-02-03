@@ -1,0 +1,128 @@
+﻿@model  List<AlertProfiler.CoreObject.DataTransferObjects.AuditTrail>
+
+
+@section MainContent{
+    <h1>Report</h1>
+    <div class="" style="margin-bottom:70px;">
+        <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+            <form action="~/Home/Export" method="post">
+
+                <button type="submit" class="btn btn-success btn-xs" value="download" name="ButtonAction">CSV Download</button>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive" style="height: 900px !important;">
+        <div>
+
+        </div>
+        <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>SNo.</th>
+                    <th>
+                        Sol Id
+                    </th>
+                    <th>
+                        Audit Page
+                    </th>
+                    <th>
+                        Audit Action
+                    </th>
+                    <th>
+                        Event Before
+                    </th>
+                    <th>
+                        Event After
+                    </th>
+                    <th>
+                        Audit Type
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Action Start Time
+                    </th>
+                    <th>
+                        Action End Time
+                    </th>
+                    <th>
+                        DurationInMs
+                    </th>
+                    <th>
+                        IP Address
+                    </th>
+                    <th>
+                        Audit Message
+                    </th>
+                    <th>
+                        Audit Data
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int count = 1;
+                    foreach (AlertProfiler.CoreObject.DataTransferObjects.AuditTrail item in Model)
+                    {
+                                <tr>
+                                    <td>@count</td>
+                                    <td>
+                                        @item.SolID
+                                    </td>
+                                    <td>
+                                        @item.AuditPage
+                                    </td>
+                                    <td>
+                                        @item.AuditAction
+                                    </td>
+                                    <td>
+                                        @item.EventBefore
+                                    </td>
+                                    <td>
+                                        @item.EventAfter
+                                    </td>
+                                    <td>@item.AuditType</td>
+                                    <td>
+                                        @item.Username
+                                    </td>
+
+                                    <td>@item.ActionStartTime</td>
+                                    <td>
+                                        @item.ActionEndTime
+                                    </td>
+                                    <td>
+                                        @item.ActionDurationInMs
+                                    </td>
+                                    <td>
+                                        @item.ClientIPAddress
+                                    </td>
+                                    <td>
+                                        @item.AuditMessage
+                                    </td>
+                                    <td>
+                                        @item.AuditData
+                                    </td>
+
+                                </tr>
+
+                        count += 1;
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ItemListTbl').dataTable();
+        });
+    </script>
+}

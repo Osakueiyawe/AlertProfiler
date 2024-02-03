@@ -1,0 +1,235 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.ManageSubscriberResponse
+
+@{
+    ViewBag.Title = "Manage Subscribers";
+}
+
+
+@section MainContent{
+    <div class="row">
+        @if (Model.ResponseCode != null)
+    {
+        if (Model.ResponseCode != "00")
+        {
+                <div class="alert alert-danger alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                    <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+                </div>
+            }
+
+            if (Model.ResponseCode == "00")
+            {
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                    <h5><b>@Html.DisplayFor(model => model.ResponseMessage)</b></h5>
+                </div>
+            }
+        }
+    </div>
+
+
+    <h4>@ViewBag.Title</h4>
+    <div class="" style="margin-bottom:70px;">
+        <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+            <form action="~/ManageSubscriber/SubscriberBetweenDateRangeAction" method="post">
+                <div class="col-md-4 col-sm-4 col-xs-4" style="padding-left:0px;">
+                    <span><strong>From: </strong></span><input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="@string.Format("{0:yyyy-MM-dd}", Model.DateFrom)" required />
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-4" style="padding-left:0px;">
+                    <span><strong>To: </strong></span><input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="@string.Format("{0:yyyy-MM-dd}", Model.DateTo)" required />
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-4" style="padding-top: 21px;">
+                    <button type="submit" class="btn btn-primary btn-xs" value="load" name="ButtonAction">Load</button>
+                </div>
+                <br />
+            </form>
+        </div>
+
+        <div class="col-md-4 col-sm-4 col-xs-4">
+            <div class="float-right">
+                @if (Model.ResponseCode == "00")
+                {
+                    <form action="~/ManageSubscriber/ApproveAllSubscriberAction" method="post">
+                        <div style="display:none;">
+                            <input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="@string.Format("{0:yyyy-MM-dd}", Model.DateFrom)" />
+                            <input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="@string.Format("{0:yyyy-MM-dd}", Model.DateTo)" />
+                        </div>
+                        <button type="submit" class="btn btn-success btn-xs" value="approve" name="ButtonAction">Approve All</button>
+                    </form>
+                        <form action="~/ManageSubscriber/DisApproveAllSubscriberAction" method="post">
+                            <div style="display:none;">
+                                <input type="date" class="form-control" name="DateFrom" size="5" placeholder="Date From" value="@string.Format("{0:yyyy-MM-dd}", Model.DateFrom)" />
+                                <input type="date" class="form-control" name="DateTo" size="5" placeholder="Date To" value="@string.Format("{0:yyyy-MM-dd}", Model.DateTo)" />
+                            </div>
+                            <button type="submit" class="btn btn-danger btn-xs" value="disapprove" name="ButtonAction">Disapprove All</button>
+                        </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive" style="height: 900px !important;">
+        <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>SNo.</th>
+                    <th>
+                        AccountNumber
+                    </th>
+                    <th>
+                        PhoneNumber
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        CreatedBy
+                    </th>
+                    <th>
+                        DateCreated
+                    </th>
+                    <th>
+                        Approval Status
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int sno = 1; }
+
+
+                @if (Model.ResponseCode == "00")
+                {
+                    foreach (var item in Model.Subscribers)
+                    {
+                        <tr>
+                            <td>@sno</td>
+                            <td>
+                                @{
+                                    string[] accountNumberList = item.AccountNumber.Split(';');
+                                    foreach (var accountNumber in accountNumberList)
+                                    {
+                                        if (!string.IsNullOrEmpty(accountNumber))
+                                        {
+                                            <span class="label label-primary">@accountNumber</span>
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                            </td>
+                            <td>
+                                @{
+                                    const int MaxLength = 19;
+                                    if (item.Description.ToString().Length > MaxLength)
+                                    {
+                                        @item.Description.ToString().Substring(0, MaxLength) <span style="cursor:pointer;" title="Click to view all Description!">[More...]</span>
+                                    }
+
+                                    if (item.Description.ToString().Length <= MaxLength)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedBy)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateCreated)
+                            </td>
+                            <td>
+
+                                @if (item.IsApproved == 0)
+                                {
+                                    <span class="label label-warning">Pending</span>
+                                }
+                                @if (item.IsApproved == 1)
+                                {
+                                    <span class="label label-success">Approved</span>
+                                }
+                                @if (item.IsApproved == 2)
+                                {
+                                    <span class="label label-danger">DisApproved</span>
+                                }
+                                @if (item.IsApproved == 3)
+                                {
+                                    <span class="label label-warning">UnSubscribe Pending</span>
+                                }
+                                @if (item.IsApproved == 4)
+                                {
+                                    <span class="label label-success">UnSubscribe Approved</span>
+                                }
+                                @if (item.IsApproved == 5)
+                                {
+                                    <span class="label label-danger">UnSubscribe DisApproved</span>
+                                }
+
+
+                                @if (item.IsApproved == 6)
+                                {
+                                    <span class="label label-warning">ReSubscribe Pending</span>
+                                }
+
+                                @if (item.IsApproved == 7)
+                                {
+                                    <span class="label label-success">ReSubscribe Approved</span>
+                                }
+
+                                @if (item.IsApproved == 8)
+                                {
+                                    <span class="label label-danger">ReSubscribe DisApproved</span>
+                                }
+
+                                @if (item.IsApproved == 9)
+                                {
+                                    <span class="label label-warning">Update Pending</span>
+                                }
+
+                                @if (item.IsApproved == 10)
+                                {
+                                    <span class="label label-success">Update Approved</span>
+                                }
+
+                                @if (item.IsApproved == 11)
+                                {
+                                    <span class="label label-danger">Update DisApproved</span>
+                                }
+
+
+                            </td>
+                            <td>
+                                @if (item.IsApproved == 1 || item.IsApproved == 2 || item.IsApproved == 4 || item.IsApproved == 5 || item.IsApproved == 7 || item.IsApproved == 8 || item.IsApproved == 10 || item.IsApproved == 11)
+                                {
+                                }
+                                else
+                                {
+                                    <a href="~/ManageSubscriber/Approve?id=@item.RequestId" class="btn btn-xs btn-success">Approve</a>
+                                    <a href="~/ManageSubscriber/Disapprove?id=@item.RequestId" class="btn btn-xs btn-danger">Disapprove</a>
+
+                                }
+
+                            </td>
+                        </tr>
+
+                                            sno++;
+                                        }
+                                    }
+
+            </tbody>
+
+        </table>
+    </div>
+
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ItemListTbl').dataTable();
+        });
+    </script>
+}
+
+

@@ -1,0 +1,248 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.AccountByAccountNumberResponse
+@{
+    ViewBag.Title = "Subscribe";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+
+
+    <div id="page-wrapper" style="margin-left: 0px; margin-right: 0px;">
+        <div class="row">
+            @if (string.IsNullOrEmpty(Model.Email) && string.IsNullOrEmpty(Model.MobileNo))
+            {
+                <div class="alert alert-danger alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                    <h5>Message:  Kindly advise the customer to fill an account update form to update his / her account information. </h5>
+                </div>
+            }
+            @if (Model.ResponseCode != "00")
+            {
+                <div class="alert alert-danger alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                    <h5>Message: @Model.ResponseMessage</h5>
+                </div>
+            }
+            @{
+                if (Model.ResponseCode == "00")
+                {
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div>
+                            <hr>
+                            <form action="~/SubscribeAlert/AlertSubscriberAction" method="post">
+                                <div class="row">
+                                    <h1 class="page-head-line">Account Details</h1>
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <img src="~/Images/enrolment_icon.jpg" />
+                                    </div>
+
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
+                                                    <div class="panel-body" id="LoginDiv">
+                                                        <label>Account Name:</label>
+                                                        <div class="form-group input-group">
+                                                            <span style="font-size: 12px; color:firebrick"><strong>@Model.AccountName</strong> </span>
+                                                        </div>
+                                                        <label>Account Type:</label>
+                                                        <div class="form-group input-group">
+                                                            <span style="font-size: 12px; color:firebrick"><strong>@Model.AccountType</strong> </span>
+
+                                                        </div>
+                                                        <label>Mobile Number:</label>
+                                                        <div class="form-group input-group">
+                                                            @if (!string.IsNullOrEmpty(@Model.MobileNo))
+                                                            {
+                                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.MobileNo</strong> </span>
+                                                                <input class="input-sm single-line" id="Email" name="MobileNo" value="@Model.MobileNo" type="text" style="width: 50px;" hidden>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span style="font-size: 12px; color:firebrick"><strong>NA</strong> </span>
+                                                            }
+                                                        </div>
+                                                        <label>Email:</label>
+                                                        <div class="form-group input-group">
+                                                            @if (!string.IsNullOrEmpty(@Model.Email))
+                                                            {
+                                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.Email</strong> </span>
+                                                                <input class="input-sm single-line" id="Email" name="Email" value="@Model.Email" type="text" style="width: 50px;" hidden>
+
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <span style="font-size: 12px; color:firebrick"><strong>NA</strong> </span>
+
+                                                            }
+                                                        </div>
+
+                                                        <label>Please tick alert options below:</label>
+                                                        <hr />
+                                                        <input class="input-sm single-line" id="AccountNumber" name="AccountNumber" value="@Model.AccountNumber" type="text" style="width: 50px;" hidden>
+                                                        <input class="input-sm single-line" id="RECID" name="RECID" value="@Model.CustomerId" type="text" style="width: 50px;" hidden>
+
+
+                                                        @if (!string.IsNullOrEmpty(Model.MobileNo) || !string.IsNullOrEmpty(Model.Email))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(Model.MobileNo))
+                                                            {
+                                                                <div class="form-group input-group">
+                                                                    <label>SMS Alert:</label>
+                                                                    <input class="input-sm single-line checkboxAccountNumber" id="IsSMSAlertActivated" name="IsSMSAlertActivated" type="checkbox" style="width: 50px;">
+                                                                </div>
+                                                            }
+
+                                                            if (!string.IsNullOrEmpty(Model.Email))
+                                                            {
+                                                                <div class="form-group input-group">
+                                                                    <label>Email Alert:</label>
+                                                                    <input class="input-sm single-line checkboxAccountNumber" id="IsEmailAlertActivated" name="IsEmailAlertActivated" type="checkbox" style="width: 50px;">
+                                                                </div>
+                                                            }
+
+                                                            <label>Description:</label>
+                                                            <div class="form-group input-group">
+                                                                <textarea cols="5" rows="3" class="form-control input-sm text-box single-line" name="Description"></textarea>
+                                                            </div>
+                                                        }
+
+
+
+
+                                                        <a href="~/SubscribeAlert/" class="alert-link btn btn-primary btn-xs float-left" title="Click to go back!"><< Back</a>
+                                                        @if (string.IsNullOrEmpty(Model.Email) && string.IsNullOrEmpty(Model.MobileNo))
+                                                        {
+                                                            <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit" disabled>Submit</button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit">Submit</button>
+
+                                                        }
+
+                                                        }
+                                                    </div>
+                                                        </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+
+                if (Model.ResponseCode == "100")
+                {
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div>
+                            <hr>
+                            <form action="~/SubscribeAlert/AlertSubscriberAction" method="post">
+                                <div class="row">
+                                    <h1 class="page-head-line">Finacle Alert Details</h1>
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <img src="~/Images/enrolment_icon.jpg" />
+                                    </div>
+
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
+                                        <div class="panel-body" id="LoginDiv">
+                                            <label>Account Number:</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.ACCOUNTNO</strong> </span>
+                                            </div>
+                                            <label>Mobile Number</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick">
+                                                    <strong>
+                                                        @Model.MOBILENO
+                                                    </strong>
+                                                </span>
+
+                                            </div>
+
+                                            <label>Email:</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.EMAIL</strong> </span>
+                                                <input class="input-sm single-line" id="Email" name="Email" value="@Model.EMAIL" type="text" style="width: 50px;" hidden>
+
+                                            </div>
+                                            <label>Created By:</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.CREATED_BY</strong> </span>
+                                                <input class="input-sm single-line" id="Email" name="MobileNo" value="@Model.CREATED_BY" type="text" style="width: 50px;" hidden>
+
+                                            </div>
+                                            <label>STATUS</label>
+                                            <div class="form-group input-group">
+                                                @if (Model.STATUS_FLG == "APPROVED")
+                                                {
+                                                    <span class="label label-success" style="font-size: 12px;">@Model.STATUS_FLG</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-danger" style="font-size: 12px;">@Model.STATUS_FLG</span>
+                                                }
+                                            </div>
+                                            <label>CONFIGURED  ALERTS</label>
+                                            <hr />
+                                            <label>SMS ALERT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.SMS_ALERT_FLG</strong> </span>
+                                            </div>
+                                            <label>EMAIL ALERT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.EMAIL_ALERT_FLG</strong> </span>
+                                            </div>
+                                            <label>DEBIT ALERT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.DR_FLG</strong> </span>
+                                            </div>
+                                            <label>CREDIT ALERT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.CR_FLG</strong> </span>
+                                            </div>
+                                            <label>DEBIT LIMIT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.DR_LIMIT</strong> </span>
+                                            </div>
+                                            <label>MONTHLY BAL ALERT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.MNTH_BAL_FLG</strong> </span>
+                                            </div>
+                                            <label>WEEKLY BAL ALERT</label>
+                                            <div class="form-group input-group">
+                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.WK_BAL_FLG</strong> </span>
+                                            </div>
+
+                                            <a href="~/SubscribeAlert/" class="alert-link btn btn-primary btn-xs float-left" title="Click to go back!"><<< Back</a>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+
+
+
+@section scripts {
+    <script type="text/javascript">
+        var selectedCheckBox = 0;
+        $(document).ready(function () {
+
+            $("#buttonSubmit").click(function (event) {
+
+                if (($("input[class*='checkboxAccountNumber']:checked").length) <= 0) {
+                    event.preventDefault();
+                    alert("Please select at least any of the alert profiler option!");
+                    $("#accountnumbermessage").html("Please select at least any of the alert profiler option!");
+                    $("#accountnumbermessage").css("color", "red");
+                }
+
+            });
+        });
+    </script>
+}

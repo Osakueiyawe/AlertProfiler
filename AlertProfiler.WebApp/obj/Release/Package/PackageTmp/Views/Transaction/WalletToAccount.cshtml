@@ -1,0 +1,129 @@
+﻿@model  IEnumerable<AlertProfiler.CoreObject.Model.WalletToAccountTransactionLog>
+@{
+    ViewBag.Title = "Wallet To Account";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+<h1>MTN Wallet To Account Transactions</h1>
+
+<div class="" style="margin-bottom:70px;">
+    <div class="col-md-8 col-sm-8 col-xs-8" style="padding:0px;">
+        <form action="~/Transaction/WalletToAccountExport" method="post">
+
+            <button type="submit" class="btn btn-success btn-xs" value="download" name="ButtonAction">CSV Download</button>
+
+
+        </form>
+    </div>
+</div>
+
+
+
+
+    <div class="table-responsive" style="height: 900px !important;">
+        <table id="ItemListTbl" class="table table-bordered table-striped table-hover display dataTable">
+            <thead>
+                <tr>
+                    <th>SNo.</th>
+                    <th>
+                        AccountNumber
+                    </th>
+                    <th>
+                        Wallet Id/Mobile
+                    </th>
+                    <th>
+                        Reference
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        No of Attempts
+                    </th>
+
+                    <th>
+                        Request Date
+                    </th>
+                    <th>
+                        Processed Date
+                    </th>
+                    <th>Corebanking Code</th>
+                    <th>CoreBanking Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int sno = 1; }
+
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@sno</td>
+                            <td>
+                                @item.DestinationAccountNumber
+                            </td>
+                            <td>
+                                @item.WalletId
+                            </td>
+                            <td>
+                                @item.ClientReferenceId
+                            </td>
+                            <td>
+                                @item.Amount
+                            </td>
+                            <td>
+
+                                @if (item.IsPosted == false)
+                                {
+                                    <span class="label label-warning">Pending</span>
+                                }
+                                @if (item.IsPosted == true)
+                                {
+                                    <span class="label label-success">Approved</span>
+                                }
+                            </td>
+                            <td>
+                                @item.RetrialCount
+                            </td>
+
+                            <td>
+                                @item.RequestDate
+                            </td>
+                            <td>
+                                @item.ProcessedDate
+                            </td>
+                            <td>
+                                @item.CoreBankingResponseCode
+                            </td>
+                            <td>
+                                @item.CoreBankingResponseMessage
+                            </td>
+
+                        </tr>
+
+                        sno++;
+                    }
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+
+
+
+    @section scripts {
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#ItemListTbl').dataTable();
+            });
+        </script>
+    }
+
+
+

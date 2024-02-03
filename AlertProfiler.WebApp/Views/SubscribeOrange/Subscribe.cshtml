@@ -1,0 +1,124 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.AccountListByPhoneNumberResponse
+@{
+    ViewBag.Title = "Subscribe";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+<h2>Subscribe</h2>
+<div id="page-wrapper" style="margin-left: 0px; margin-right: 0px;">
+    <div class="row">
+        @{
+            if (Model.ResponseCode == "00")
+            {
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div>
+                        <hr>
+                        <form action="~/SubscribeOrange/SubscribeAction" method="post">
+                            <div class="row">
+                                <h1 class="page-head-line">Account Details</h1>
+
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <img src="~/Images/enrolment_icon.jpg" />
+                                </div>
+
+                                <div class="col-md-8 col-sm-6 col-xs-12">
+                                            <div class="panel-body" id="LoginDiv">
+
+                                                @{
+                                                    <label>Orange Response: </label><br />
+                                                    <label>First Name:</label>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                        <input class="form-control input-sm text-box single-line" type="text" name="FirstName" readonly value="@Model.FirstName" required>
+                                                    </div>
+
+                                                    <label>Last Name:</label>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                        <input class="form-control input-sm text-box single-line" type="text" name="LastName" readonly value="@Html.DisplayFor(model => model.LastName)" required>
+                                                    </div>
+
+                                                    <label>DOB:</label>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                        <input class="form-control input-sm text-box single-line" type="text" name="Dob" readonly value="@Html.DisplayFor(model => model.Dob)" required>
+                                                    </div>
+
+                                                    <label>Cin:</label>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                        <input class="form-control input-sm text-box single-line" type="text" name="Cin" readonly value="@Html.DisplayFor(model => model.Cin)" required>
+                                                    </div>
+
+                                                    <label>Token:</label>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                        <input class="form-control input-sm text-box single-line" type="text" name="Key" id="Key" readonly value="@Html.DisplayFor(model => model.Key)" required>
+                                                    </div>
+
+                                                    <label>CoreBanking Response: </label><br />
+                                                    <h5>Please select the subscriber account number to be subscribed</h5>
+                                                    <label>Account Number(s): </label>
+                                                    <span id="accountnumbermessage"></span>
+                                                    if (Model.ListAccountByAccountNumberResponse != null)
+                                                    {
+                                                        foreach (var item in Model.ListAccountByAccountNumberResponse)
+                                                        {
+                                                            <div class="form-group input-group">
+                                                                <input class="input-sm single-line checkboxAccountNumber" id="AccountNumber" name="AccountNumber" type="radio" value="@item.AccountNumber" style="width: 50px;">
+                                                                <span style="font-size: 11px;"><strong>@item.AccountName - @item.AccountNumber - [ @item.AccountType ]</strong></span>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    <hr />
+                                                    <label>Phone Number:</label>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                        <input class="form-control input-sm text-box single-line" type="text" name="PhoneNumber" readonly value="@Html.DisplayFor(model => model.PhoneNumber)" required>
+                                                    </div>
+
+
+                                                    <input class="form-control input-sm text-box single-line" type="hidden" name="Key" readonly value="@Html.DisplayFor(model => model.Key)" required>
+
+
+                                                    <label>Description:</label>
+                                                    <div class="form-group">
+                                                        <textarea cols="5" rows="3" class="form-control input-sm text-box single-line" name="Description" required></textarea>
+                                                    </div>
+
+                                                    <a href="~/SubscribeOrange/" class="alert-link btn btn-primary btn-xs float-left" title="Click to go back!"><< Back</a>
+                                                    <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit">Submit</button>
+                                                }
+                                            </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+
+
+        }
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        var selectedCheckBox = 0;
+        $(document).ready(function () {
+
+            $("#buttonSubmit").click(function (event) {
+
+                if (($("input[class*='checkboxAccountNumber']:checked").length) <= 0) {
+                    event.preventDefault();
+                    alert("Please Select At Least One Accout Number!");
+                    $("#accountnumbermessage").html("Please Select At Least One Accout Number!");
+                    $("#accountnumbermessage").css("color", "red");
+                }
+
+            });
+        });
+    </script>
+}
+

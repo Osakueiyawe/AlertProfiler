@@ -1,0 +1,129 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.AccountListByPhoneNumberResponse
+
+@{
+    ViewBag.Title = "Update Subscriber";
+}
+
+@section MainContent{
+    <div id="page-wrapper" style="margin-left: 0px; margin-right: 0px;">
+        <div class="row">
+            @{
+                if (Model.ResponseCode == "00")
+                {
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div>
+                            <hr>
+                            <form action="~/UpdateSubscriber/UpdateSubscriberAction" method="post">
+                                <div class="row">
+                                    <h1 class="page-head-line">Account Details</h1>
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <img src="~/Images/enrolment_icon.jpg" />
+                                    </div>
+
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
+                                        <div class="panel-body" id="LoginDiv">
+                                            <h5>Please select the subscriber account number to be subscribed</h5>
+                                            @{
+
+                                                <label>Seletected Account Number(s):</label>
+                                                <div class="account-number-container" id="account_number_container">
+                                                    @foreach (var item in Model.ListAccountByAccountNumberResponse)
+                                                    {
+                                                        <div style="margin-bottom: 15px;">
+                                                            <span class="label label-primary" style="font-size: 15px;">
+                                                                <span style="font-size: 11px;"><strong>@item.AccountName - @item.AccountNumber - [ @item.AccountType ]</strong></span>
+                                                            </span>
+                                                            <button class="btn btn-xs btn-danger" type="button" style="border-radius: 100%; margin-left: 10px;" title="Click To Remove This Account!" onclick="RemoveAccountNumber(this)">x</button>
+                                                            <br />
+                                                            <div class="form-group input-group" style="display:none;">
+                                                                <input class="" id="AccountNumber" name="AccountNumber[]" type="checkbox" value="@item.AccountNumber.Trim()" checked>
+                                                                <span style="font-size: 15px;"><strong>@item.AccountNumber</strong></span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <br />
+                                                <br />
+
+                                                <label>Other Account Number(s): </label>
+                                                        <span id="accountnumbermessage"></span>
+                                                foreach (var item in Model.ListAccountByAccountNumberResponse)
+                                                {
+                                                    <div class="form-group input-group">
+                                                        <input class="checkboxAccountNumber form-control" id="AccountNumber" name="AccountNumber[]" type="checkbox" value="@item.AccountNumber.Trim()" style="width: 50px;">
+                                                        <span style="font-size: 11px;"><strong>@item.AccountName - @item.AccountNumber - [ @item.AccountType ]</strong></span>
+                                                    </div>
+                                                }
+
+                                                <hr />
+                                                <label>Phone Number:</label>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                                    <input class="form-control input-sm text-box single-line" type="text" name="PhoneNumber" readonly value="@Html.DisplayFor(model => model.PhoneNumber)" required>
+                                                    <input class="form-control input-sm text-box single-line" type="hidden" name="RequestId" value="@Html.DisplayFor(model => model.RequestId)" required>
+                                                </div>
+                                            <a href="~/UpdateSubscriber/" class="alert-link btn btn-primary btn-xs float-left" title="Click to go back!"><< Back</a>
+                                            <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit">Submit</button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                                                }
+            }
+        </div>
+    </div>
+
+}
+
+
+@section scripts {
+    <script type="text/javascript">
+        var selectedCheckBox = 0;
+        $(document).ready(function () {
+
+            $("#buttonSubmit").click(function (event) {
+                var account_number_container = $("#account_number_container > div");
+                if (account_number_container.length <= 0) {
+                    if (($("input[class*='checkboxAccountNumber']:checked").length) <= 0) {
+                        event.preventDefault();
+                        alert("Please Select At Least One Accout Number!");
+                    }
+                }
+
+                if (selectedCheckBox == 1) {
+                    alert("Please Select At Least One Accout Number!");
+                    $("#accountnumbermessage").html("Please Select At Least One Accout Number!");
+                    $("#accountnumbermessage").css("color", "red");
+                }
+            });
+        });
+
+        function RemoveAccountNumber(_this) {
+            $(_this).parent().remove();
+        }
+
+
+        function GetAccountDetails() {
+            var _url = "";
+            var _data = {};
+
+            $.ajax({
+                url: _url,
+                data: _data,
+                method: "",
+                success: function (result) {
+
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+
+    </script>
+}

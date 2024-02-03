@@ -1,0 +1,74 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.Response
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+<h2>MTN MOMO ACCOUNT LINK PAGE</h2>
+<div id="page-wrapper" style="margin-left: 0px; margin-right: 0px;">
+    <div class="row">
+
+        @if (Model.ResponseCode == "00")
+        {
+            <div class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5>Message: @Model.ResponseMessage</h5>
+            </div>
+        }
+
+        @if (Model.ResponseCode != "00" && Model.ResponseCode != null)
+        {
+            <div class="alert alert-danger alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
+                <h5>Message: @Model.ResponseMessage</h5>
+            </div>
+        }
+
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div>
+                <hr>
+                <form action="~/MtnSubscription/LinkAccount" method="post">
+                    <div class="row">
+
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                            <h1 class="page-head-line">Subscribe</h1>
+                            <div class="panel-body" id="LoginDiv">
+                                <h5>
+                                    Please enter MSISDN,PHONE NUMBER,ACCOUNT NUMBER and ACTIVATION CODE
+                                </h5>
+                                <span class="field-validation-valid text-danger" data-valmsg-for="msisdn" data-valmsg-replace="true"></span>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input autocomplete="off" class="form-control input-sm text-box single-line" id="msisdn" maxlength="32" name="msisdn" placeholder="Enter msisdn" type="text" value="" required>
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="msisdn" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                    <input autocomplete="off" class="form-control input-sm text-box single-line" id="activationCode" maxlength="32" name="activationCode" placeholder="Enter Activation Code" type="text" value="" required>
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="activationCode" data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                    <input autocomplete="off" class="form-control input-sm text-box single-line" id="phoneNumber" maxlength="32" name="phoneNumber" placeholder="Enter Mtn Phone Number" type="text" value="" required>
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="phoneNumber" data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                    <input autocomplete="off" class="form-control input-sm text-box single-line" id="accountNumber" maxlength="32" name="accountNumber" placeholder="Enter Account Number to Link" type="text" value="" required>
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="accountNumber" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div>
+                                    <input type="submit" value="Link Account" class="btn btn-primary btn-xs" title="Click to load Account Details!">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

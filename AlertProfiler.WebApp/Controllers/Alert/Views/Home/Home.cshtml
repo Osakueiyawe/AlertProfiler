@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+@section MainContent{
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-head-line">Home</h1>
+            <h1 class="page-subhead-line">
+                Welcome
+                @if (Session["DisplayName"] != null)
+                {
+                    @Session["DisplayName"]
+                }
+                else
+                {
+                }, please click a menu item above to navigate to the operation area of your choice.<br/><br /> Last login: @ViewBag.Date.ToString()
+            </h1><br/>
+           
+        </div>
+    </div>
+
+}

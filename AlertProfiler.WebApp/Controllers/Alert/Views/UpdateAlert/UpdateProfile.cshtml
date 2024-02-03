@@ -1,0 +1,190 @@
+﻿@model  AlertProfiler.CoreObject.DataTransferObjects.AlertUpdateComboResponse
+@{
+    ViewBag.Title = "UpdateProfile";
+    Layout = "~/Views/Shared/_LayoutAlert.cshtml";
+}
+
+
+    <div id="page-wrapper" style="margin-left: 0px; margin-right: 0px;">
+        <div class="row">
+            @{
+//if (Model.ResponseCode == "00")
+//{
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div>
+                            <hr>
+                            <form action="~/UpdateAlert/UpdateProfile" method="post">
+                                <div class="row">
+                                    <h1 class="page-head-line">Account Details</h1>
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <img src="~/Images/enrolment_icon.jpg" />
+                                    </div>
+
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
+                                                    <div class="panel-body" id="LoginDiv">
+                                                        <h5>Existing Profile Detail(s):</h5>
+                                                        @{
+
+                                                            <div class="account-number-container" id="account_number_container">
+
+                                                                <div style="margin-bottom: 15px;">
+                                                                    <label>Account Number:</label>
+                                                                    <div class="form-group input-group">
+                                                                        <span style="font-size: 12px; color:firebrick"><strong>@Model.AccountByAccountNumberResponse.ACCOUNTNO  </strong> </span>
+                                                                    </div>
+                                                                    <label>Mobile Number:</label>
+                                                                    <div class="form-group input-group">
+                                                                        <span style="font-size: 12px; color:firebrick"><strong>@Model.AccountByAccountNumberResponse.MOBILENO</strong> </span>
+                                                                    </div>
+                                                                    <label>Email:</label>
+                                                                    <div class="form-group input-group">
+                                                                        <span style="font-size: 12px; color:firebrick"><strong>@Model.AccountByAccountNumberResponse.EMAIL</strong> </span>
+                                                                    </div>
+                                                                    @if (Model.AccountByAccountNumberResponse.EMAIL_ALERT_FLG == "YES")
+                                                                    {
+                                                                        <input class="input-sm single-line checkboxAccountNumber" id="IsEmailAlertActivated1" name="IsEmailAlertActivated1" value="true" checked="checked" type="checkbox" style="width: 50px;" disabled="disabled">
+                                                                        <span style="font-size: 12px;"><strong>Email Alert</strong></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input class="input-sm single-line checkboxAccountNumber" id="IsEmailAlertActivated" name="IsEmailAlertActivated2"  type="checkbox" style="width: 50px;"  disabled="disabled">
+                                                                        <span style="font-size: 12px;"><strong>Email Alert</strong></span>
+                                                                    }
+
+                                                                    @if (Model.AccountByAccountNumberResponse.SMS_ALERT_FLG == "YES")
+                                                                    {
+                                                                        <input class="input-sm single-line checkboxAccountNumber" id="IsSMSAlertActivated1" name="IsSMSAlertActivated1" value="true" checked="checked" type="checkbox" style="width: 50px;" disabled="disabled">
+                                                                        <span style="font-size: 12px;"><strong>SMS Alert</strong></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input class="input-sm single-line checkboxAccountNumber" id="IsSMSAlertActivated" name="IsSMSAlertActivated2"  type="checkbox" style="width: 50px;"  disabled="disabled">
+                                                                        <span style="font-size: 12px;"><strong>SMS Alert</strong></span>
+                                                                    }
+                                                                </div>
+
+                                                            </div>
+
+                                                            <br />
+                                                            <br />
+                                                            <hr />
+                                                            <label>Update Alert below: </label>
+                                                            <span id="accountnumbermessage"></span>
+
+                                                            <div class="form-group input-group">
+                                                                <span style="font-size: 12px; color:firebrick"><strong>@Model.AccountByAccountNumberResponse.AccountNumber  </strong> </span>
+                                                            </div>
+                                                            <div class="form-group input-group">
+
+                                                                @if (string.IsNullOrEmpty(Model.AccountByAccountNumberResponse.Email))
+                                                                {
+                                                                    <input class="input-sm single-line checkboxAccountNumber" id="IsEmailAlertActivated1" name="IsEmailAlertActivated1" type="checkbox" style="width: 50px;" disabled="disabled">
+                                                                    <span style="font-size: 12px;"><strong>Email Alert [NA]</strong></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="input-sm single-line checkboxAccountNumber" id="IsEmailAlertActivated" name="IsEmailAlertActivated" value="true" type="checkbox" style="width: 50px;" checked="checked">
+                                                                    <span style="font-size: 12px;"><strong>Email Alert [@Model.AccountByAccountNumberResponse.Email]</strong></span>
+                                                                }
+                                                            </div>
+
+                                                            <div class="form-group input-group">
+
+
+                                                                @if (string.IsNullOrEmpty(Model.AccountByAccountNumberResponse.MobileNo))
+                                                                {
+                                                                    <input class="input-sm single-line checkboxAccountNumber" id="IsSMSAlertActivated1" name="IsSMSAlertActivated1" type="checkbox" style="width: 50px;" disabled="disabled">
+                                                                    <span style="font-size: 12px;"><strong>SMS Alert [NA]</strong></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input class="input-sm single-line checkboxAccountNumber" id="IsSMSAlertActivated" name="IsSMSAlertActivated" value="true" type="checkbox" style="width: 50px;" checked="checked">
+                                                                    <span style="font-size: 12px;"><strong>SMS Alert [@Model.AccountByAccountNumberResponse.MobileNo]</strong></span>
+                                                                }
+                                                            </div>
+
+                                                            <div class="form-group input-group">
+
+                                                                <input class="form-control input-sm text-box single-line" type="hidden" name="RequestId" value="@Html.DisplayFor(model => model.RequestId)" required>
+                                                                <input class="form-control input-sm text-box single-line" type="hidden" name="AccountNumber" value="@Html.DisplayFor(model => model.AccountByAccountNumberResponse.ACCOUNTNO)" required>
+                                                                <input class="form-control input-sm text-box single-line" type="hidden" name="Email" value="@Html.DisplayFor(model => model.AccountByAccountNumberResponse.EMAIL)" required>
+                                                                <input class="form-control input-sm text-box single-line" type="hidden" name="MobileNo" value="@Html.DisplayFor(model => model.AccountByAccountNumberResponse.MOBILENO)" required>
+                                                                <input class="form-control input-sm text-box single-line" type="hidden" name="RECID" value="@Html.DisplayFor(model => model.AccountByAccountNumberResponse.RECID)" required>
+
+                                                            </div>
+                                                            <label>Description:</label>
+                                                            <div class="form-group input-group">
+                                                                <textarea cols="5" rows="3" class="form-control input-sm text-box single-line" name="Description"></textarea>
+                                                            </div>
+                                                            <a href="~/UpdateSubscriber/" class="alert-link btn btn-primary btn-xs float-left" title="Click to go back!"><< Back</a>
+                                                            if (string.IsNullOrEmpty(Model.AccountByAccountNumberResponse.MobileNo) && string.IsNullOrEmpty(Model.AccountByAccountNumberResponse.Email))
+                                                            {
+                                                                <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit" disabled>Submit</button>
+                                                            }
+                                                            else
+                                                            {
+                                                                <button type="submit" class="btn btn-success btn-xs float-right" id="buttonSubmit">Submit</button>
+                                                            }
+
+                                                        }
+                                                    </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                //}
+            }
+        </div>
+    </div>
+
+
+
+
+@section scripts {
+    <script type="text/javascript">
+        var selectedCheckBox = 0;
+        $(document).ready(function () {
+
+            $("#buttonSubmit").click(function (event) {
+                var account_number_container = $("#account_number_container > div");
+                if (account_number_container.length <= 0) {
+                    if (($("input[class*='checkboxAccountNumber']:checked").length) <= 0) {
+                        event.preventDefault();
+                        alert("Please Select At Least One Accout Number!");
+                    }
+                }
+
+                if (selectedCheckBox == 1) {
+                    alert("Please Select At Least One Accout Number!");
+                    $("#accountnumbermessage").html("Please Select At Least One Accout Number!");
+                    $("#accountnumbermessage").css("color", "red");
+                }
+            });
+        });
+
+        function RemoveAccountNumber(_this) {
+            $(_this).parent().remove();
+        }
+
+
+        function GetAccountDetails() {
+            var _url = "";
+            var _data = {};
+
+            $.ajax({
+                url: _url,
+                data: _data,
+                method: "",
+                success: function (result) {
+
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+
+    </script>
+}
